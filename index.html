@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>角色百科</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <div class="brand">
+        <div class="brand__logo">⚔️</div>
+        <div class="brand__text">
+          <div class="brand__title">角色百科</div>
+          <div class="brand__subtitle">Character Encyclopedia</div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input id="searchInput" class="search__input" type="search" placeholder="搜索：名字/阵营/种族/职业/稀有度/描述…" autocomplete="off" />
+        <button id="clearBtn" class="btn btn--ghost" type="button">清除</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="toolbar">
+      <div class="toolbar__left">
+        <div class="pill" id="resultPill">加载中…</div>
+      </div>
+      <div class="toolbar__right">
+        <select id="campFilter" class="select">
+          <option value="">全部阵营</option>
+        </select>
+        <select id="jobFilter" class="select">
+          <option value="">全部职业</option>
+        </select>
+        <select id="rarityFilter" class="select">
+          <option value="">全部稀有度</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+
+    <section id="emptyState" class="empty" hidden>
+      <div class="empty__title">没有匹配的角色</div>
+      <div class="empty__desc">试试换个关键词，或清空筛选条件。</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© 角色百科站点原型</span>
+      <span class="muted">静态站点 + JSON 数据驱动</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

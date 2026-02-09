@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>角色详情</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="btn btn--ghost" href="index.html">← 返回列表</a>
+
+      <div class="brand brand--small">
+        <div class="brand__logo">🛡️</div>
+        <div class="brand__text">
+          <div class="brand__title">角色详情</div>
+          <div class="brand__subtitle" id="subtitle">加载中…</div>
+        </div>
+      </div>
+
+      <div class="header__spacer"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="detail" class="detail" hidden></section>
+
+    <section id="notFound" class="empty" hidden>
+      <div class="empty__title">未找到该角色</div>
+      <div class="empty__desc">请检查链接是否正确，或返回列表重新选择。</div>
+      <div style="margin-top:12px;">
+        <a class="btn" href="index.html">返回列表</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span class="muted">提示：URL 形如 character.html?id=H001</span>
+    </div>
+  </footer>
+
+  <script src="character.js"></script>
+</body>
+</html>
