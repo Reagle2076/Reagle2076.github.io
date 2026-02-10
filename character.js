@@ -167,16 +167,26 @@ async function init() {
   }
 
   try {
-    const res = await fetch(DATA_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error(`加载失败：${res.status}`);
-    const data = await res.json();
-    const all = Array.isArray(data) ? data : [];
+    let all = [];
+    try {
+      const res = await fetch(DATA_URL, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        all = Array.isArray(data) ? data : [];
+      }
+    } catch (_) {}
+    if (!all.length && typeof window.CHARACTERS_DATA !== "undefined" && Array.isArray(window.CHARACTERS_DATA))
+      all = window.CHARACTERS_DATA;
     const c = all.find(x => x.id === id);
 
     if (!c) {
-      subtitleEl.textContent = `未找到：${id}`;
+      subtitleEl.textContent = all.length ? `未找到：${id}` : "数据加载失败";
       detailEl.hidden = true;
       notFoundEl.hidden = false;
+      if (!all.length) {
+        notFoundEl.querySelector(".empty__title").textContent = "数据加载失败";
+        notFoundEl.querySelector(".empty__desc").textContent = "请通过本地服务器打开（如 npx serve）或部署到 GitHub Pages 后访问。";
+      }
       return;
     }
 

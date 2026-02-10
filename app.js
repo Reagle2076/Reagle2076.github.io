@@ -149,15 +149,25 @@ function applyFilters() {
   render(filtered);
 }
 
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    return Array.isArray(data) ? data : null;
+  } catch (e) {
+    if (typeof window.CHARACTERS_DATA !== "undefined" && Array.isArray(window.CHARACTERS_DATA))
+      return window.CHARACTERS_DATA;
+    throw e;
+  }
+}
+
 async function init() {
   try {
     resultPill.textContent = "加载中…";
 
-    const res = await fetch(DATA_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error(`加载失败：${res.status}`);
-    const data = await res.json();
-
-    if (!Array.isArray(data)) throw new Error("characters.json 不是数组");
+    const data = await loadData();
+    if (!data) throw new Error("characters.json 不是数组");
 
     const ids = new Set();
     for (const c of data) {
