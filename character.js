@@ -19,9 +19,32 @@ function getIdFromUrl() {
   return params.get("id");
 }
 
+function renderImageBlock(c) {
+  // 允许你在 JSON 里用 image 字段存 gif/png/jpg 路径
+  if (!c.image) {
+    return `<div class="muted">暂无角色图像（请在 characters.json 里为该角色添加 image 字段）</div>`;
+  }
+
+  const safeSrc = escapeHtml(c.image);
+
+  // onerror: 图片加载失败时替换成提示文字
+  return `
+    <img
+      src="${safeSrc}"
+      alt="${escapeHtml(c.name)}"
+      loading="lazy"
+      style="width:100%;border-radius:12px;margin-top:10px;display:block;"
+      onerror="this.outerHTML='<div class=&quot;muted&quot; style=&quot;margin-top:10px;&quot;>角色图像加载失败：请检查路径是否正确（当前：${safeSrc}）</div>'"
+    />
+  `;
+}
+
 function renderDetail(c) {
   document.title = `${c.name} - 角色详情`;
   subtitleEl.textContent = `${c.id} · ${c.camp}`;
+
+  const imageBlock = renderImageBlock(c);
+  const promptText = escapeHtml(c.image_prompt || "（暂无 image_prompt）");
 
   detailEl.innerHTML = `
     <div class="detail__grid">
@@ -47,18 +70,16 @@ function renderDetail(c) {
 
       <div class="panel">
         <div class="panel__title">角色图像</div>
-        ${
-  c.image
-    ? `<img src="${c.image}" 
-           style="width:100%;border-radius:12px;margin-top:10px;" />`
-    : `<div class="muted">暂无角色图像</div>`
-}
+        ${imageBlock}
+
+        <div class="panel__title" style="margin-top:16px;">图像生成提示词</div>
         <div class="muted" style="font-size:12px; line-height:1.6;">
           你可以把下面的 prompt 复制到任意绘图模型里生成角色立绘。
         </div>
+
         <div style="height:10px"></div>
         <div class="mono" style="white-space:pre-wrap; line-height:1.55;">
-${escapeHtml(c.image_prompt || "（暂无 image_prompt）")}
+${promptText}
         </div>
       </div>
     </div>
@@ -83,7 +104,7 @@ async function init() {
     if (!res.ok) throw new Error(`加载失败：${res.status}`);
     const data = await res.json();
 
-    const c = Array.isArray(data) ? data.find(x => x.id === id) : null;
+    const c = Array.isArray(data) ? data.find((x) => x.id === id) : null;
 
     if (!c) {
       subtitleEl.textContent = `未找到：${id}`;
