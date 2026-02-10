@@ -46,13 +46,7 @@ function renderDetail(c) {
       </div>
 
       <div class="panel">
-        <div class="panel__title">角色图像</div>
-        ${
-  c.image
-    ? `<img src="${c.image}" 
-           style="width:100%;border-radius:12px;margin-top:10px;" />`
-    : `<div class="muted">暂无角色图像</div>`
-}
+        <div class="panel__title">图像生成提示词</div>
         <div class="muted" style="font-size:12px; line-height:1.6;">
           你可以把下面的 prompt 复制到任意绘图模型里生成角色立绘。
         </div>
