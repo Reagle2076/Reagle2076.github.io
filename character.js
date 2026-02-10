@@ -91,10 +91,11 @@ function getRelated(all, current, limit) {
   return out.slice(0, limit);
 }
 
+const DEFAULT_PORTRAIT = "images/default.png";
+
 function portraitContent(c) {
-  if (c.image) return `<img src="${escapeHtml(c.image)}" alt="" />`;
-  const initial = (c.name && c.name[0]) ? c.name[0] : (c.id && c.id[0]) ? c.id[0] : "?";
-  return `<div class="detail__art-placeholder">${escapeHtml(initial)}</div>`;
+  const src = c.image || DEFAULT_PORTRAIT;
+  return `<img src="${escapeHtml(src)}" alt="" />`;
 }
 
 function renderDetail(c, allCharacters) {
@@ -141,9 +142,8 @@ function renderDetail(c, allCharacters) {
   const related = getRelated(allCharacters, c, 3);
   relatedGrid.innerHTML = related.map(r => {
     const name = escapeHtml(r.name);
-    const portrait = r.image
-      ? `<img src="${escapeHtml(r.image)}" alt="" loading="lazy" />`
-      : (r.name && r.name[0]) ? escapeHtml(r.name[0]) : r.id ? escapeHtml(r.id[0]) : "?";
+    const portraitSrc = r.image || DEFAULT_PORTRAIT;
+    const portrait = `<img src="${escapeHtml(portraitSrc)}" alt="" loading="lazy" />`;
     return `
       <a class="related-card" href="character.html?id=${encodeURIComponent(r.id)}">
         <div class="related-card__portrait">${portrait}</div>

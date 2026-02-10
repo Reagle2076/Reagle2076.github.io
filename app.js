@@ -89,10 +89,11 @@ function buildFilterPills() {
   });
 }
 
+const DEFAULT_PORTRAIT = "images/default.png";
+
 function portraitContent(c) {
-  if (c.image) return `<img src="${escapeHtml(c.image)}" alt="" loading="lazy" />`;
-  const initial = (c.name && c.name[0]) ? c.name[0] : (c.id && c.id[0]) ? c.id[0] : "?";
-  return escapeHtml(initial);
+  const src = c.image || DEFAULT_PORTRAIT;
+  return `<img src="${escapeHtml(src)}" alt="" loading="lazy" />`;
 }
 
 function render(list) {
