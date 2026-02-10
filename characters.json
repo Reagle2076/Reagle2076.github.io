@@ -17,6 +17,11 @@
     "job": "刺客",
     "rarity": "SSR",
     "desc": "暮影议会的幽影使徒，擅长在月色与烟雾之间消失，传言她的匕首能切开影子本身。",
+    "subtitle": "暗影刺客",
+    "skills": [
+      { "name": "暗影打击", "desc": "传送到敌人身后进行致命一击。", "icon": "🔵" },
+      { "name": "沉默之刃", "desc": "投掷淬毒匕首造成流血效果。", "icon": "🔴" }
+    ],
     "image_prompt": "dark fantasy character portrait, elf assassin, hooded mantle, twin daggers with faint moon glow, pale silver hair, subtle tattoos, misty night background, high detail concept art, dramatic lighting, 4k"
   },
   {

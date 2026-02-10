@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>角色详情</title>
+  <title>角色详情 · Character Detail</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,25 +11,51 @@
     <div class="container header__inner">
       <a class="btn btn--ghost" href="index.html">← 返回列表</a>
 
-      <div class="brand brand--small">
-        <div class="brand__logo">🛡️</div>
+      <div class="brand">
+        <div class="brand__logo">⚔️</div>
         <div class="brand__text">
-          <div class="brand__title">角色详情</div>
+          <div class="brand__title">Character Detail Page</div>
           <div class="brand__subtitle" id="subtitle">加载中…</div>
         </div>
       </div>
 
       <div class="header__spacer"></div>
+
+      <div class="header__icons" aria-hidden="true">
+        <span title="搜索">🔍</span>
+        <span title="收藏">📦</span>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <section id="detail" class="detail" hidden></section>
+    <div id="detailNav" class="detail-nav" hidden></div>
+
+    <section id="detail" class="detail" hidden>
+      <div class="detail__art" id="detailArt"></div>
+      <div class="detail__info">
+        <h1 class="detail__title" id="detailTitle"></h1>
+        <p class="detail__subtitle" id="detailSubtitle"></p>
+        <div class="detail__attrs" id="detailAttrs"></div>
+        <div class="detail__section">
+          <h2 class="detail__section-title">Skills</h2>
+          <div class="skill-list" id="detailSkills"></div>
+        </div>
+        <div class="detail__section">
+          <h2 class="detail__section-title">Background</h2>
+          <div class="detail__desc" id="detailDesc"></div>
+        </div>
+        <div class="detail__section">
+          <h2 class="detail__section-title">Related Characters</h2>
+          <div class="related-grid" id="relatedGrid"></div>
+        </div>
+      </div>
+    </section>
 
     <section id="notFound" class="empty" hidden>
       <div class="empty__title">未找到该角色</div>
       <div class="empty__desc">请检查链接是否正确，或返回列表重新选择。</div>
-      <div style="margin-top:12px;">
+      <div style="margin-top:16px;">
         <a class="btn" href="index.html">返回列表</a>
       </div>
     </section>
@@ -37,7 +63,8 @@
 
   <footer class="footer">
     <div class="container footer__inner">
-      <span class="muted">提示：URL 形如 character.html?id=H001</span>
+      <span>© 角色百科</span>
+      <span class="muted">character.html?id=xxx</span>
     </div>
   </footer>
 

@@ -3,43 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>角色百科</title>
+  <title>角色百科 · Character Encyclopedia</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="container header__inner">
-      <div class="brand">
-        <div class="brand__logo">⚔️</div>
-        <div class="brand__text">
-          <div class="brand__title">角色百科</div>
-          <div class="brand__subtitle">Character Encyclopedia</div>
-        </div>
-      </div>
-
-      <div class="search">
-        <input id="searchInput" class="search__input" type="search" placeholder="搜索：名字/阵营/种族/职业/稀有度/描述…" autocomplete="off" />
-        <button id="clearBtn" class="btn btn--ghost" type="button">清除</button>
-      </div>
-    </div>
-  </header>
-
   <main class="container">
+    <div class="page-label">Character List Page</div>
+    <header class="hero">
+      <h1 class="hero__title">Character Encyclopedia</h1>
+      <p class="hero__subtitle">角色百科</p>
+    </header>
+
+    <div class="search-wrap">
+      <div class="search__icon" aria-hidden="true">🔍</div>
+      <input id="searchInput" class="search__input" type="search" placeholder="Q Search characters..." autocomplete="off" />
+      <button id="clearBtn" class="btn btn--ghost" type="button">清除</button>
+    </div>
+
+    <div class="filters">
+      <div class="filters__row" id="filterRowJob"></div>
+      <div class="filters__row" id="filterRowCamp"></div>
+    </div>
+
     <section class="toolbar">
-      <div class="toolbar__left">
-        <div class="pill" id="resultPill">加载中…</div>
-      </div>
-      <div class="toolbar__right">
-        <select id="campFilter" class="select">
-          <option value="">全部阵营</option>
-        </select>
-        <select id="jobFilter" class="select">
-          <option value="">全部职业</option>
-        </select>
-        <select id="rarityFilter" class="select">
-          <option value="">全部稀有度</option>
-        </select>
-      </div>
+      <div class="pill" id="resultPill">加载中…</div>
     </section>
 
     <section id="grid" class="grid" aria-live="polite"></section>
@@ -52,8 +39,8 @@
 
   <footer class="footer">
     <div class="container footer__inner">
-      <span>© 角色百科站点原型</span>
-      <span class="muted">静态站点 + JSON 数据驱动</span>
+      <span>© 角色百科</span>
+      <span class="muted">静态站点 · JSON 数据驱动</span>
     </div>
   </footer>
 

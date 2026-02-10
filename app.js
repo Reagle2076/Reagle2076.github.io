@@ -1,19 +1,27 @@
-// app.js
+// app.js - 角色列表页（暗黑奇幻风格）
 const DATA_URL = "characters.json";
 
 const gridEl = document.getElementById("grid");
 const emptyEl = document.getElementById("emptyState");
 const resultPill = document.getElementById("resultPill");
-
 const searchInput = document.getElementById("searchInput");
 const clearBtn = document.getElementById("clearBtn");
-
-const campFilter = document.getElementById("campFilter");
-const jobFilter = document.getElementById("jobFilter");
-const rarityFilter = document.getElementById("rarityFilter");
+const filterRowJob = document.getElementById("filterRowJob");
+const filterRowCamp = document.getElementById("filterRowCamp");
 
 let allCharacters = [];
 let filtered = [];
+let activeJob = "";
+let activeCamp = "";
+
+const JOB_ICONS = {
+  "骑士": "⚔️",
+  "法师": "🔮",
+  "刺客": "🗡️",
+  "战士": "🪓",
+  "牧师": "✝️",
+  "术士": "📜"
+};
 
 function escapeHtml(str) {
   return String(str ?? "")
@@ -25,21 +33,66 @@ function escapeHtml(str) {
 }
 
 function rarityClass(r) {
-  const v = String(r || "").toLowerCase();
-  if (v === "ssr") return "badge--ssr";
-  if (v === "sr") return "badge--sr";
-  if (v === "r") return "badge--r";
+  const v = String(r || "").toUpperCase();
+  if (v === "SSR") return "badge--ssr";
+  if (v === "SR") return "badge--sr";
+  if (v === "R") return "badge--r";
   return "badge--n";
 }
 
-function buildOptions(selectEl, values) {
-  const unique = [...new Set(values.filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b), "zh-Hans-CN"));
-  for (const v of unique) {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    selectEl.appendChild(opt);
-  }
+function getJobIcon(job) {
+  return JOB_ICONS[job] || "◆";
+}
+
+function buildFilterPills() {
+  const jobs = [...new Set(allCharacters.map(c => c.job).filter(Boolean))].sort((a, b) => String(a).localeCompare(b, "zh-Hans-CN"));
+  const camps = [...new Set(allCharacters.map(c => c.camp).filter(Boolean))].sort((a, b) => String(a).localeCompare(b, "zh-Hans-CN"));
+
+  filterRowJob.innerHTML = "";
+  const allJob = document.createElement("button");
+  allJob.type = "button";
+  allJob.className = "filter-pill" + (activeJob ? "" : " active");
+  allJob.textContent = "All";
+  allJob.dataset.type = "job";
+  allJob.dataset.value = "";
+  allJob.addEventListener("click", () => { activeJob = ""; buildFilterPills(); applyFilters(); });
+  filterRowJob.appendChild(allJob);
+  jobs.forEach(job => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-pill" + (activeJob === job ? " active" : "");
+    btn.innerHTML = `<span class="filter-pill__icon">${getJobIcon(job)}</span>${escapeHtml(job)}`;
+    btn.dataset.type = "job";
+    btn.dataset.value = job;
+    btn.addEventListener("click", () => { activeJob = job; buildFilterPills(); applyFilters(); });
+    filterRowJob.appendChild(btn);
+  });
+
+  filterRowCamp.innerHTML = "";
+  const allCamp = document.createElement("button");
+  allCamp.type = "button";
+  allCamp.className = "filter-pill" + (activeCamp ? "" : " active");
+  allCamp.textContent = "All";
+  allCamp.dataset.type = "camp";
+  allCamp.dataset.value = "";
+  allCamp.addEventListener("click", () => { activeCamp = ""; buildFilterPills(); applyFilters(); });
+  filterRowCamp.appendChild(allCamp);
+  camps.forEach(camp => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-pill" + (activeCamp === camp ? " active" : "");
+    btn.textContent = camp;
+    btn.dataset.type = "camp";
+    btn.dataset.value = camp;
+    btn.addEventListener("click", () => { activeCamp = camp; buildFilterPills(); applyFilters(); });
+    filterRowCamp.appendChild(btn);
+  });
+}
+
+function portraitContent(c) {
+  if (c.image) return `<img src="${escapeHtml(c.image)}" alt="" loading="lazy" />`;
+  const initial = (c.name && c.name[0]) ? c.name[0] : (c.id && c.id[0]) ? c.id[0] : "?";
+  return escapeHtml(initial);
 }
 
 function render(list) {
@@ -55,74 +108,44 @@ function render(list) {
   resultPill.textContent = `共 ${list.length} 个角色`;
 
   const frag = document.createDocumentFragment();
-
   for (const c of list) {
     const a = document.createElement("a");
     a.className = "card";
     a.href = `character.html?id=${encodeURIComponent(c.id)}`;
 
     const name = escapeHtml(c.name);
-    const camp = escapeHtml(c.camp);
-    const race = escapeHtml(c.race);
     const job = escapeHtml(c.job);
+    const jobIcon = getJobIcon(c.job);
     const rarity = escapeHtml(c.rarity);
-    const desc = escapeHtml(c.desc);
 
     a.innerHTML = `
-      <div class="card__top">
-        <div>
-          <div class="card__name">${name}</div>
-          <div class="brand__subtitle mono">${escapeHtml(c.id)}</div>
+      <div class="card__portrait">${portraitContent(c)}</div>
+      <div class="card__body">
+        <div class="card__name">${name}</div>
+        <div class="card__job">
+          <span class="card__job-icon" aria-hidden="true">${jobIcon}</span>
+          <span>${job}</span>
+          <span class="badge ${rarityClass(c.rarity)}" style="margin-left:auto">${rarity}</span>
         </div>
-        <div class="badge ${rarityClass(c.rarity)}">${rarity}</div>
-      </div>
-
-      <div class="card__meta">
-        <span class="tag">${camp}</span>
-        <span class="tag">${race}</span>
-        <span class="tag">${job}</span>
-      </div>
-
-      <div class="card__desc">${desc}</div>
-
-      <div class="card__hint">
-        <span>查看详情</span>
-        <span>→</span>
       </div>
     `;
-
     frag.appendChild(a);
   }
-
   gridEl.appendChild(frag);
 }
 
 function textHaystack(c) {
-  return [
-    c.id,
-    c.name,
-    c.camp,
-    c.race,
-    c.job,
-    c.rarity,
-    c.desc
-  ].join(" ").toLowerCase();
+  return [c.id, c.name, c.camp, c.race, c.job, c.rarity, c.desc].join(" ").toLowerCase();
 }
 
 function applyFilters() {
   const q = (searchInput.value || "").trim().toLowerCase();
-  const camp = campFilter.value;
-  const job = jobFilter.value;
-  const rarity = rarityFilter.value;
-
   filtered = allCharacters.filter(c => {
-    if (camp && c.camp !== camp) return false;
-    if (job && c.job !== job) return false;
-    if (rarity && c.rarity !== rarity) return false;
-    if (q) return textHaystack(c).includes(q);
+    if (activeCamp && c.camp !== activeCamp) return false;
+    if (activeJob && c.job !== activeJob) return false;
+    if (q && !textHaystack(c).includes(q)) return false;
     return true;
   });
-
   render(filtered);
 }
 
@@ -136,7 +159,6 @@ async function init() {
 
     if (!Array.isArray(data)) throw new Error("characters.json 不是数组");
 
-    // 基础校验：确保 id 唯一
     const ids = new Set();
     for (const c of data) {
       if (!c.id) throw new Error("存在缺少 id 的角色");
@@ -145,28 +167,17 @@ async function init() {
     }
 
     allCharacters = data;
-
-    // 生成筛选项
-    buildOptions(campFilter, allCharacters.map(x => x.camp));
-    buildOptions(jobFilter, allCharacters.map(x => x.job));
-    buildOptions(rarityFilter, allCharacters.map(x => x.rarity));
-
-    // 默认按 id 排序（你也可以按 rarity / name）
     allCharacters.sort((a, b) => String(a.id).localeCompare(String(b.id)));
 
+    buildFilterPills();
     applyFilters();
 
-    // 事件
     searchInput.addEventListener("input", applyFilters);
-    campFilter.addEventListener("change", applyFilters);
-    jobFilter.addEventListener("change", applyFilters);
-    rarityFilter.addEventListener("change", applyFilters);
-
     clearBtn.addEventListener("click", () => {
       searchInput.value = "";
-      campFilter.value = "";
-      jobFilter.value = "";
-      rarityFilter.value = "";
+      activeJob = "";
+      activeCamp = "";
+      buildFilterPills();
       applyFilters();
       searchInput.focus();
     });
