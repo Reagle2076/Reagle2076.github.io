@@ -71,6 +71,15 @@ function renderDetail(c) {
       <div class="panel">
         <div class="panel__title">角色图像</div>
         ${imageBlock}
+
+        <div class="panel__title" style="margin-top:16px;">图像生成提示词</div>
+        <div class="muted" style="font-size:12px; line-height:1.6;">
+          你可以把下面的 prompt 复制到任意绘图模型里生成角色立绘。
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="mono" style="white-space:pre-wrap; line-height:1.55;">
+${promptText}
         </div>
       </div>
     </div>
