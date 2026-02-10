@@ -1,0 +1,3 @@
+# 将角色立绘放在此文件夹，例如：
+# H001.png, H002.png, ...
+# 然后在 characters.json 中为对应角色添加 "image": "images/H001.png"
